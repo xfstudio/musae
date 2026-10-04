@@ -1,4 +1,4 @@
-name: openmuse
+name: musae
 services:
   browser-worker:
     build:

@@ -1,0 +1,20 @@
+name: musae-production
+services:
+  postgres:
+    image: postgres:17-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: musae
+      POSTGRES_DB: musae
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env}
+    ports:
+      - "127.0.0.1:55432:5432"
+    volumes:
+      - production-postgres:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U musae -d musae"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+volumes:
+  production-postgres:

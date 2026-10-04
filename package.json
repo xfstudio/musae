@@ -1,5 +1,5 @@
 {
-  "name": "openmuse",
+  "name": "musae",
   "version": "0.1.0",
   "private": true,
   "type": "module",
@@ -27,7 +27,12 @@
     "start:worker": "node dist/apps/server/src/worker-entry.js",
     "dev:browser": "node --env-file=.env --import tsx apps/worker/src/index.ts",
     "test:computer": "tsx --test apps/computer/smoke.test.ts",
-    "test:computer:e2b-desktop": "tsx --test apps/computer/e2b-desktop-smoke.test.ts"
+    "test:computer:e2b-desktop": "tsx --test apps/computer/e2b-desktop-smoke.test.ts",
+    "build:production": "node infra/build-production.mjs",
+    "start:production": "node infra/start-production.mjs",
+    "stop:production": "pm2 stop musae-api musae-browser musae-web",
+    "status:production": "pm2 list",
+    "logs:production": "pm2 logs"
   },
   "dependencies": {
     "@ag-ui/client": "0.0.59",
@@ -55,6 +60,7 @@
     "@copilotkit/core": "1.70.1",
     "@types/node": "^24.0.0",
     "@types/pg": "^8.15.5",
+    "pm2": "7.0.4",
     "tsx": "^4.20.0",
     "typescript": "~5.9.2"
   }

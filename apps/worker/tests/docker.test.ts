@@ -105,7 +105,7 @@ test("Docker Chromium opens public sites, renders, navigates and restores its sa
         const context = await chromium.launchPersistentContext('/data/${id}/profile', {headless:true});
         const page = await context.newPage();
         await page.goto('https://example.com');
-        await page.evaluate(() => localStorage.setItem('openmuse-profile-test', 'retained'));
+        await page.evaluate(() => localStorage.setItem('musae-profile-test', 'retained'));
         await context.close();
       `,
         ],
@@ -164,7 +164,7 @@ test("Docker Chromium opens public sites, renders, navigates and restores its sa
       assert(
         state.some(
           (item: { name: string; value: string }) =>
-            item.name === "openmuse-profile-test" && item.value === "retained",
+            item.name === "musae-profile-test" && item.value === "retained",
         ),
       );
     }

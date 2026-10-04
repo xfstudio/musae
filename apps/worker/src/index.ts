@@ -1,14 +1,20 @@
+import dns from "node:dns/promises";
 import { createWorkerServer } from "./server.ts";
+
+const dnsServers = process.env.WORKER_DNS_SERVERS?.split(",")
+  .map((server) => server.trim())
+  .filter(Boolean);
+if (dnsServers?.length) dns.setServers(dnsServers);
 
 const token = process.env.WORKER_TOKEN ?? "";
 const worker = await createWorkerServer({
   token,
-  dataDir: process.env.WORKER_DATA_DIR ?? ".openmuse/browser-profiles",
+  dataDir: process.env.WORKER_DATA_DIR ?? ".musae/browser-profiles",
   maxSessions: 3,
   idleTimeoutMs: 30 * 60_000,
 });
 worker.server.listen(8790, process.env.WORKER_HOST ?? "127.0.0.1", () => {
-  console.log("OpenMuse browser worker listening on port 8790");
+  console.log("Musae browser worker listening on port 8790");
 });
 let stopping = false;
 async function stop() {

@@ -12,7 +12,7 @@ import { fixture as computerFixture } from "./helpers/computer.ts";
 import { modelFixture } from "./helpers/model.ts";
 
 test("CopilotKit model worker executes server tools and persists the confirmed outcome", async (t) => {
-  const directory = await mkdtemp(join(tmpdir(), "openmuse-model-"));
+  const directory = await mkdtemp(join(tmpdir(), "musae-model-"));
   const db = await createStore();
   const calls: { name: string; arguments: object }[] = [
     {
@@ -119,7 +119,7 @@ test("CopilotKit model worker executes server tools and persists the confirmed o
 });
 
 test("the model worker keeps the text a model replies with when it calls no tool", async (t) => {
-  const directory = await mkdtemp(join(tmpdir(), "openmuse-model-text-"));
+  const directory = await mkdtemp(join(tmpdir(), "musae-model-text-"));
   const db = await createStore();
   const mock = createDemoModel({ latency: 0, firstByteDelay: 0 });
   await mock.start();
@@ -167,7 +167,7 @@ test("the model worker keeps the text a model replies with when it calls no tool
 });
 
 test("replaying a completed prepared action returns its receipt without reopening approval", async (t) => {
-  const directory = await mkdtemp(join(tmpdir(), "openmuse-model-replay-"));
+  const directory = await mkdtemp(join(tmpdir(), "musae-model-replay-"));
   const db = await createStore();
   const draft = {
     title: "Sample walk",

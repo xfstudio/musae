@@ -5,7 +5,7 @@ export const API_URL = (
   (Platform.OS === "android" ? "http://10.0.2.2:8787" : "http://localhost:8787")
 ).replace(/\/$/, "");
 
-export class MuseApi {
+export class MusaeApi {
   constructor(readonly token: string) {}
   async request<T>(path: string, body?: unknown, method?: string): Promise<T> {
     const response = await fetch(`${API_URL}${path}`, {

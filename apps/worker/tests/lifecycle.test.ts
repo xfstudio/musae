@@ -10,7 +10,7 @@ import { createBrowserManager } from "../src/browser.ts";
 test("real Chromium cleans failed profiles and restores a saved UUID after worker restart", {
   timeout: 90_000,
 }, async () => {
-  const dataDir = await mkdtemp(join(tmpdir(), "openmuse-browser-lifecycle-"));
+  const dataDir = await mkdtemp(join(tmpdir(), "musae-browser-lifecycle-"));
   let browser = await createBrowserManager({ dataDir });
   const id = randomUUID();
   const failedId = randomUUID();
@@ -36,7 +36,7 @@ test("real Chromium cleans failed profiles and restores a saved UUID after worke
     try {
       const page = await context.newPage();
       await page.goto("https://example.com/");
-      await page.evaluate(() => localStorage.setItem("openmuse-profile-test", "retained"));
+      await page.evaluate(() => localStorage.setItem("musae-profile-test", "retained"));
     } finally {
       await context.close();
     }
@@ -61,7 +61,7 @@ test("real Chromium cleans failed profiles and restores a saved UUID after worke
         .find((origin: { origin: string }) => origin.origin === "https://example.com")
         ?.localStorage.some(
           (item: { name: string; value: string }) =>
-            item.name === "openmuse-profile-test" && item.value === "retained",
+            item.name === "musae-profile-test" && item.value === "retained",
         ),
     );
   } finally {

@@ -9,7 +9,7 @@
       "!**/dist",
       "!**/ios",
       "!**/android",
-      "!**/.openmuse",
+      "!**/.musae",
       "!**/artifacts"
     ]
   },

@@ -17,7 +17,7 @@ if (existsSync(".env")) {
   process.loadEnvFile(".env");
   if (shadowed.length)
     console.warn(
-      `[OpenMuse] Using ${shadowed.join(", ")} from the environment instead of .env. ` +
+      `[Musae] Using ${shadowed.join(", ")} from the environment instead of .env. ` +
         (shadowed.length === 1
           ? "Unset it to use the .env value."
           : "Unset them to use the .env values."),
@@ -31,6 +31,7 @@ export interface Config {
   port: number;
   host: string;
   publicUrl: string;
+  publicWebUrl?: string;
   dataDir: string;
   databaseUrl?: string;
   accessKey?: string;
@@ -65,7 +66,7 @@ export type ComputerProvider = "docker" | "e2b-desktop";
 export const defaultJevModel = "jev-1.13.0";
 
 export const intelligenceKeyRequiredMessage =
-  "OpenMuse requires CPK_INTELLIGENCE_API_KEY. " +
+  "Musae requires CPK_INTELLIGENCE_API_KEY. " +
   "Run `npx copilotkit@latest login` and `npx copilotkit@latest project select`, " +
   "then set the generated server-only key. " +
   "See https://docs.copilotkit.ai/intelligence/connect-your-runtime";
@@ -136,9 +137,10 @@ export function readConfig(): Config {
     port,
     host: process.env.HOST ?? "127.0.0.1",
     publicUrl,
-    dataDir: resolve(process.env.DATA_DIR ?? ".openmuse"),
+    publicWebUrl: process.env.PUBLIC_WEB_URL ?? "http://localhost:8081",
+    dataDir: resolve(process.env.DATA_DIR ?? ".musae"),
     databaseUrl: process.env.DATABASE_URL,
-    accessKey: process.env.OPENMUSE_ACCESS_KEY,
+    accessKey: process.env.MUSAE_ACCESS_KEY,
     encryptionKey: process.env.TOKEN_ENCRYPTION_KEY,
     model: process.env.MODEL,
     jevMode,
@@ -156,7 +158,7 @@ export function readConfig(): Config {
     taskWorkerEnabled: process.env.TASK_WORKER_ENABLED !== "false",
     webSearchEnabled: process.env.WEB_SEARCH_ENABLED !== "false",
     computerEnabled: process.env.COMPUTER_ENABLED === "true",
-    computerImage: process.env.COMPUTER_IMAGE ?? "openmuse-computer:local",
+    computerImage: process.env.COMPUTER_IMAGE ?? "musae-computer:local",
     computerDeploymentId: process.env.COMPUTER_DEPLOYMENT_ID,
     computerProvider,
     computerE2bTemplate: process.env.COMPUTER_E2B_TEMPLATE?.trim() || "desktop",
@@ -170,7 +172,7 @@ export function readConfig(): Config {
     (!config.accessKey || config.accessKey.length < 24 || !config.encryptionKey)
   )
     throw new Error(
-      "Live mode requires OPENMUSE_ACCESS_KEY (24+ characters) and TOKEN_ENCRYPTION_KEY (32-byte base64)",
+      "Live mode requires MUSAE_ACCESS_KEY (24+ characters) and TOKEN_ENCRYPTION_KEY (32-byte base64)",
     );
   if (mode === "sample" && !["127.0.0.1", "localhost", "::1"].includes(config.host))
     throw new Error("Sample workspace is local-only. HOST must be a loopback address.");

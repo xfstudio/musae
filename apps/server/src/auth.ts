@@ -29,7 +29,7 @@ export class Auth {
     return { token, mode: this.config.mode };
   }
   async owner(authorization?: string) {
-    if (!authorization?.startsWith("Bearer ")) throw new AppError("Sign in to OpenMuse", 401);
+    if (!authorization?.startsWith("Bearer ")) throw new AppError("Sign in to Musae", 401);
     const session = await this.db.get<{ owner: string; expiresAt: number }>(
       "system",
       "sessions",

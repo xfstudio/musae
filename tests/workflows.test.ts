@@ -11,7 +11,7 @@ import type { ActionProposal } from "../packages/domain/src/index.ts";
 let db: Store, server: Awaited<ReturnType<typeof createApp>>, directory: string;
 const owner = "workflow-user";
 before(async () => {
-  directory = await mkdtemp(join(tmpdir(), "openmuse-workflows-"));
+  directory = await mkdtemp(join(tmpdir(), "musae-workflows-"));
   db = await createStore({ dataDir: join(directory, "db") });
   server = await createApp(db, {
     mode: "sample",

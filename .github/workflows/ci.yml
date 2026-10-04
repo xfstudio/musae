@@ -1,7 +1,7 @@
 name: CI
 on:
   push:
-    branches: [main]
+    branches: [main, musae]
   pull_request:
   workflow_dispatch:
 permissions:
@@ -85,6 +85,6 @@ jobs:
       - uses: pnpm/action-setup@f40ffcd9367d9f12939873eb1018b921a783ffaa # v4
       - run: pnpm install --frozen-lockfile
       - name: Build the isolated Linux computer
-        run: docker build -t openmuse-computer:local apps/computer
+        run: docker build -t musae-computer:local apps/computer
       - name: Verify computer isolation, persistence and cancellation
         run: pnpm test:computer

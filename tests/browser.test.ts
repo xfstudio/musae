@@ -287,7 +287,7 @@ test("browser imports return rejected downloads even when no PDF was accepted", 
 });
 
 test("worker persists unsupported, oversized and interrupted download outcomes", async () => {
-  const directory = await mkdtemp(join(tmpdir(), "openmuse-download-outcomes-"));
+  const directory = await mkdtemp(join(tmpdir(), "musae-download-outcomes-"));
   try {
     const cases = [
       { name: "notes.txt", contents: Buffer.from("not a PDF"), code: "UNSUPPORTED_DOWNLOAD" },
@@ -394,7 +394,7 @@ test("browser rejects DNS answers containing any private address and pins public
 });
 
 test("worker protects all controls, validates before launch, and health reveals no sessions", async () => {
-  const dataDir = await mkdtemp(join(tmpdir(), "openmuse-worker-"));
+  const dataDir = await mkdtemp(join(tmpdir(), "musae-worker-"));
   const savedId = "00000000-0000-4000-8000-000000000002";
   const downloadId = "00000000-0000-4000-8000-000000000003";
   const pendingId = "00000000-0000-4000-8000-000000000004";

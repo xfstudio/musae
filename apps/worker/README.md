@@ -1,6 +1,6 @@
-# OpenMuse browser worker
+# Musae browser worker
 
-An independent Node/Playwright service for the OpenMuse server. There is no OpenBot dependency. The server owns app authentication and user ownership; this worker accepts requests only from a trusted server holding `WORKER_TOKEN`.
+An independent Node/Playwright service for the Musae server. There is no OpenBot dependency. The server owns app authentication and user ownership; this worker accepts requests only from a trusted server holding `WORKER_TOKEN`.
 
 ## Run
 
@@ -63,6 +63,8 @@ Only public HTTP(S) destinations on ports 80/443 are allowed. Navigation and sub
 
 This is application-enforced egress policy, not a kernel firewall or a guarantee against a Chromium exploit. Playwright's default Chromium launch disables Chromium's internal sandbox. The container runs as `pwuser`, with no Docker socket, no app/provider secrets, no Linux capabilities, read-only root filesystem, and memory/process limits. Review [Playwright's container guidance](https://playwright.dev/docs/docker) when hardening a multi-tenant deployment.
 
+The worker queries A and AAAA records directly using the host's configured DNS servers, avoiding slow OS/VPN name lookup. Hosts-file overrides are not used. Both address families are checked; private or reserved answers remain blocked. When using Clash or Mihomo, use `dns.enhanced-mode: redir-host` so public destinations resolve to real addresses instead of Fake-IP addresses in `198.18.0.0/15`. If another VPN takes priority over that resolver, set `WORKER_DNS_SERVERS` to the reachable resolver IPs, separated by commas. This setting affects only the worker process.
+
 ## Verify
 
 ```sh
@@ -90,4 +92,4 @@ pnpm --dir apps/worker exec playwright install chromium
 pnpm dev:browser
 ```
 
-The local worker binds to `127.0.0.1:8790` and stores profiles in `.openmuse/browser-profiles` by default. Docker sets `WORKER_HOST=0.0.0.0` inside its container; Compose publishes only the loopback host port. `WORKER_DATA_DIR` selects another private profile directory.
+The local worker binds to `127.0.0.1:8790` and stores profiles in `.musae/browser-profiles` by default. Docker sets `WORKER_HOST=0.0.0.0` inside its container; Compose publishes only the loopback host port. `WORKER_DATA_DIR` selects another private profile directory.

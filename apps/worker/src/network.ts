@@ -1,5 +1,5 @@
 import type { LookupAddress } from "node:dns";
-import { lookup } from "node:dns/promises";
+import dns from "node:dns/promises";
 import { isIP } from "node:net";
 import { WorkerError } from "./errors.ts";
 
@@ -43,10 +43,26 @@ export function isPublicIp(address: string): boolean {
 
 export type Resolver = (hostname: string) => Promise<LookupAddress[]>;
 
-export async function validatePublicUrl(
-  value: string,
-  resolve: Resolver = (hostname) => lookup(hostname, { all: true, verbatim: true }),
-) {
+async function resolveAddresses(hostname: string): Promise<LookupAddress[]> {
+  // Query DNS directly: OS/VPN name lookup can stall even when DNS answers promptly.
+  const records = async (family: 4 | 6): Promise<LookupAddress[]> => {
+    try {
+      const addresses = await (family === 4 ? dns.resolve4(hostname) : dns.resolve6(hostname));
+      return addresses.map((address) => ({ address, family }));
+    } catch (error) {
+      if (
+        error instanceof Error &&
+        "code" in error &&
+        (error.code === "ENODATA" || error.code === "ENOTFOUND")
+      )
+        return [];
+      throw error;
+    }
+  };
+  return (await Promise.all([records(4), records(6)])).flat();
+}
+
+export async function validatePublicUrl(value: string, resolve: Resolver = resolveAddresses) {
   const blocked = () =>
     new WorkerError(
       "BLOCKED_URL",
